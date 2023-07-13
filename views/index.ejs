@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>appointment booking</title>
+    <link href=<%= "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"%> rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <style>
+        body {align-content: center;}
+        h1   {color: blue;}
+        p    {color: red;}
+        fieldset {width:500px; border: 1px #96D4D4;
+  margin:auto; border-radius: 10px; background-color: white; margin-top: 50px;}
+        .formheading {text-align: center;  font-family: Verdana, sans-serif; margin: 10px; color: grey}
+        .content {margin:10px; font-family: Verdana, sans-serif; color: grey;}
+        .db_data {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+padding-left: 80px;}
+     
+        input {box-sizing: border-box;}
+        #name {width:478px;}
+        #email {width:478px;}
+        #phone {width:478px;}
+        #date {width:239px; color: grey;}
+        #time {width:239px; color: grey;}
+        #btn {width: 478px; color: white; background-color: #96D4D4; border-radius: 10px; border-color: white;}
+        table, th, td {
+  border: 1px solid white;
+  border-collapse: collapse;
+}
+th, td {
+  background-color: #96D4D4;
+  border-collapse: separate;
+  border-spacing: 30px;
+}
+    
+    </style>
+    
+</head>
+<body>
+    <!-- <script src=<%= "https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" %> integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin= <%="anonymous"%></script> -->
+    <div class="Container">
+    <fieldset>
+       
+    <form action="/" method="post" id="form">
+        <div class="formheading">
+        <h4>Book a call</h3>
+
+        <h6>Book a call slot and our representative will call you within 1hr of selected time</h5>
+        </div>
+        <hr>
+        <div class="content" id="content">
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="data"><br>
+            <label for="email">Email:</label><br>
+            <input type="text" id="email" name="data"><br>
+            <label for="phone">Phone:</label><br>
+            <input type="text" id="phone" name="data"><br>
+            <label for="time">Time for call:</label><br>
+            <input type="date" id="time" name="data"><input type="time" id="time" name="data"><br>
+            <button type="submit" id="btn" name="data" >GET A CALL</button> 
+        </div>
+      
+    </form>
+    </fieldset>
+    <!-- <button id="btn" action="/test" method="post" >TEST</button> -->
+    <!-- <input type="button" id="btn_test" name="btn_test" action="/test" method="post" value="Delete" />  -->
+        <div class="db_data">
+        <table>
+            <% for(var i=0; i<users.length; i++) { %>
+                <tr>
+                    
+
+                    <td><%= users[i].user_id %></td>
+                    <td><%= users[i].name %></td>
+                    <td><%= users[i].email %></td>
+                    <td><%= users[i].phone %></td>
+                    <% const new_date = (users[i].date).toString() %>
+                    <td><%= new_date.substring(0,15) %></td>
+                    <td><%= users[i].time %></td>
+ 
+                    <td><button class="delete-button" data-id="<%= users[i].user_id %>">Delete</button></td>
+                    <!-- <td><input type="hidden" id="delete-<%= i %>" value="deleteip"</td>  -->
+
+
+                </tr>
+            <% } %>
+
+
+        </table>
+
+    </div>
+
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+  // Get all the delete buttons
+  var deleteButtons = document.getElementsByClassName('delete-button');
+
+  // Add a click event listener to each delete button
+  for (var i = 0; i < deleteButtons.length; i++) {
+    deleteButtons[i].addEventListener('click', function() {
+      // Extract the ID from the data-id attribute of the clicked button
+      var id = this.getAttribute('data-id');
+      
+      // Perform any actions with the extracted ID (e.g., send it to the server for deletion)
+      console.log('Delete button clicked for ID:', id);
+      deleteRow(id);
+    
+    });
+}
+function deleteRow(id) {
+    // Set up the request parameters
+    var url = '/delete';
+    var options = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ id: id })
+    };
+
+    // Send the request
+    fetch(url, options)
+      .then(function(response) {
+        if (response.ok) {
+        console.log('Row deleted successfully');
+        //   response.redirect('/');
+        window.location.href = '/';
+          // Perform any additional actions upon successful deletion
+        } else {
+          console.log('Error deleting row');
+          
+          // Handle the error case appropriately
+        }
+      })
+      .catch(function(error) {
+        console.log('Request error:', error);
+        // Handle the error case appropriately
+      });
+  }
+
+
+
+})
+</script>  
+        
+</div>    
+</body>
+</html>
